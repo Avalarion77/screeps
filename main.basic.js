@@ -4,42 +4,45 @@ var roleBuilder = require('role.builder');
 var roleRepairer = require('role.repair');
 
 var mainBasic = {
-    reproduceCreeps: function() {
-        var harvesters = _.sum(Game.creeps, (c) => c.memory.role == 'harvester');
-        //console.log('current available harvesters: ' + harvesters);
-        var upgraders = _.sum(Game.creeps, (c) => c.memory.role == 'upgrader');
-        //console.log('current available upgraders: ' + upgraders);
-        var builders = _.sum(Game.creeps, (c) => c.memory.role == 'builder');
-        //console.log('current available builders: ' + builders);
-        var repairers = _.sum(Game.creeps, (c) => c.memory.role == 'repairer');
-        //console.log('current available repairers: ' + repairers);
+
+    reproduceCreeps: function () {
         
         var currentAvailableEnergy = Game.spawns.Avalarion.room.energyAvailable;
-        if (harvesters < 4) {
-            if (currentAvailableEnergy >= 200) {
-                console.log('spawn harvester');
-                Game.spawns.Avalarion.createCreep([WORK,CARRY,MOVE], undefined, {role:'harvester', working: false});
+        var parts;
+        var costs;
+        if (getHarvesters() < 5) {
+            parts = [WORK, WORK, CARRY, MOVE];
+            costs = getBodyPartCosts(parts);
+            if (currentAvailableEnergy >= costs) {
+                console.log('spawn harvester costs: ' + costs);
+                Game.spawns.Avalarion.createCreep(parts, undefined, { role: 'harvester', working: false });
             }
             
         }
-        else if (upgraders < 1) {
-            if (currentAvailableEnergy >= 250) {
-                console.log('spawn upgrader');
-                Game.spawns.Avalarion.createCreep([WORK,CARRY,MOVE,MOVE], undefined, {role:'upgrader', working: false});
+        else if (getUpgraders() < 2) {
+            parts = [WORK, CARRY, MOVE, MOVE];
+            costs = getBodyPartCosts(parts);
+            if (currentAvailableEnergy >= costs) {
+                console.log('spawn upgrader costs: ' + costs);
+                Game.spawns.Avalarion.createCreep(parts, undefined, { role: 'upgrader', working: false });
             }
             
         }
-        else if (builders < 2) {
-            if (currentAvailableEnergy >= 200) {
-                console.log('spawn builder');
-                Game.spawns.Avalarion.createCreep([WORK,CARRY,MOVE], undefined, {role:'builder', working: false});
+        else if (getBuilders() < 3) {
+            parts = [WORK, CARRY, MOVE];
+            costs = getBodyPartCosts(parts);
+            if (currentAvailableEnergy >= costs) {
+                console.log('spawn builder costs: ' + costs);
+                Game.spawns.Avalarion.createCreep(parts, undefined, { role: 'builder', working: false });
             }
             
         }
-        else if (repairers < 1) {
-            if (currentAvailableEnergy >= 200) {
-                console.log('spawn repairer');
-                Game.spawns.Avalarion.createCreep([WORK,CARRY,MOVE], undefined, {role:'repairer', working: false});
+        else if (getRepairers() < 1) {
+            parts = [WORK, CARRY, MOVE];
+            costs = getBodyPartCosts(parts);
+            if (currentAvailableEnergy >= costs) {
+                console.log('spawn repairer costs: ' + costs);
+                Game.spawns.Avalarion.createCreep(parts, undefined, { role: 'repairer', working: false });
             }
             
         }
@@ -71,15 +74,64 @@ var mainBasic = {
                 delete Memory.creeps[name];
             }
         }
-        //roleHarvester.test(Game.creeps[0].room);
-        
-        for(var name in Game.creeps) {
-            //console.log(JSON.stringify(Game.creeps[name].room));
-            
-        }
+    },
+
+    getCreepInfo: function() {
+        console.log('current available harvesters: ' + getHarvesters());
+        console.log('current available upgraders: ' + getUpgraders());
+        console.log('current available builders: ' + getBuilders());
+        console.log('current available repairers: ' + getRepairers());
+        console.log('current available transporters: ' + getTransporters());
     }
     
 };
+
+function getHarvesters() {
+    return _.sum(Game.creeps, (c) => c.memory.role == 'harvester');
+}
+function getUpgraders() {
+    return _.sum(Game.creeps, (c) => c.memory.role == 'upgrader');
+}
+function getBuilders() {
+    return _.sum(Game.creeps, (c) => c.memory.role == 'builder');
+}
+function getRepairers() {
+    return _.sum(Game.creeps, (c) => c.memory.role == 'repairer');
+}
+function getTransporters() {
+    return _.sum(Game.creeps, (c) => c.memory.role == 'transporter');
+}
+
+function getBodyPartCosts(harvesterParts) {
+    var costs = 0;
+    harvesterParts.forEach(function (part) {
+        if (part == WORK) {
+            costs += BODYPART_COST.work;
+        }
+        else if (part == MOVE) {
+            costs += BODYPART_COST.move;
+        }
+        else if (part == CARRY) {
+            costs += BODYPART_COST.carry;
+        }
+        else if (part == ATTACK) {
+            costs += BODYPART_COST.attack;
+        }
+        else if (part == RANGED_ATTACK) {
+            costs += BODYPART_COST.ranged_attack;
+        }
+        else if (part == HEAL) {
+            costs += BODYPART_COST.heal;
+        }
+        else if (part == CLAIM) {
+            costs += BODYPART_COST.claim;
+        }
+        else if (part == TOUGH) {
+            costs += BODYPART_COST.tough;
+        }
+    });
+    return costs;
+}
 
 
 

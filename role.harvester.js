@@ -39,46 +39,51 @@ var roleHarvester = {
         }
         /* Harvester transfer Energy */
         else {
-            // find all Extensions & Spawn structures in this room
-	        var targets = getExtensionsAndSpawnsWithLowEnergy(creep.room);
-	        //console.log('debug harvester - creep.room ' + creep.room)
-	        //console.log('debug harvester - getExtensions ' + targets)
-	        //var targets = getContainersWithLowEnergy(creep.room);
-                
+            // find all Container & Extensions & Spawn structures in this room that has no full energy
+	        var targets = getStructureWithLowEnergy(creep.room);
 	        // if targets available
-
             if(targets.length > 0) {
                 //console.log('harvester - bring energy to: ' + targets[0]);
                 transferEnergy(creep, targets[0]);
             }
         }
-    },
-    test: function (room) {
-        getContainersWithLowEnergy(room);
     }
 };
 
-function getExtensionsAndSpawnsWithLowEnergy(room) {
-    return room.find(FIND_STRUCTURES, {
-        filter: (structure) => {
-            return (structure.structureType == STRUCTURE_EXTENSION || structure.structureType == STRUCTURE_SPAWN || structure.structureType == STRUCTURE_CONTAINER)
-                && structure.energy < structure.energyCapacity;
-        }
-    });
+function getStructureWithLowEnergy(room) {
+    var val;
+    
+    //if (val.length == 0) {
+        val = room.find(FIND_STRUCTURES, {
+            filter: (structure) => {
+                return (structure.structureType == STRUCTURE_EXTENSION || structure.structureType == STRUCTURE_SPAWN)
+                    && (structure.energy < structure.energyCapacity);
+            }
+        });
+    //}
+    //if (val.length > 0) console.log('get targets 1 - ' + val + ' ' + val[0].store[RESOURCE_ENERGY] + ' ' + val[0].storeCapacity);
+    if (val.length == 0) {
+        val = room.find(FIND_STRUCTURES, {
+            filter: (structure) => {
+                return (structure.structureType == STRUCTURE_CONTAINER)
+                    && (structure.store[RESOURCE_ENERGY] < structure.storeCapacity);
+            }
+        });
+    }
+    //console.log('get targets 2 - ' + val);
+    return val;
 };
 
-function getContainersWithLowEnergy(room) {
-    return room.find(FIND_STRUCTURES, {
-        filter: (structure) => {
-            return structure.structureType == STRUCTURE_CONTAINER &&
-                structure.energy < structure.energyCapacity;
-        }
-    });
-};
-
-function transferEnergy(creep,target) {
-    if (creep.transfer(target, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+function transferEnergy(creep, target) {
+    var returnValue = creep.transfer(target, RESOURCE_ENERGY);
+    if (returnValue == 0) {
+        // all fine
+    }
+    else if (returnValue == ERR_NOT_IN_RANGE) {
         creep.moveTo(target);
+    }
+    else {
+        console.log('transferEnergy[creep: ' + creep.name + '] failed - ' + returnValue);
     }
 };
 

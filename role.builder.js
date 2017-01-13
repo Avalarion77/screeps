@@ -17,14 +17,44 @@ var roleBuilder = {
             if(creep.build(construction[0]) == ERR_NOT_IN_RANGE) {
                 creep.moveTo(construction[0]);
             }
-        }
+	    }
+        // need energy
         else {
-            var sources = creep.room.find(FIND_SOURCES);
-            if(creep.harvest(sources[0]) == ERR_NOT_IN_RANGE) {
-                creep.moveTo(sources[0]);
+	        var sources = getStructureWithEnergy(creep);
+            if (sources.length == 0) {
+                sources = creep.room.find(FIND_SOURCES);
+                returnValue = creep.harvest(sources[0])
+                if (returnValue == ERR_NOT_IN_RANGE) {
+                    creep.moveTo(sources[0]);
+                }
+            } else {
+                returnValue = creep.withdraw(sources[0], RESOURCE_ENERGY)
+                if (returnValue == ERR_NOT_IN_RANGE) {
+                    creep.moveTo(sources[0]);
+                }
             }
         }
 	}
+};
+
+function getStructureWithEnergy(creep) {
+    var val;
+    val = creep.room.find(FIND_STRUCTURES, {
+        filter: (structure) => {
+            return (structure.structureType == STRUCTURE_CONTAINER)
+                && (structure.store[RESOURCE_ENERGY] > creep.carryCapacity);
+        }
+    });
+ 
+    if (val.length == 0) {
+        val = creep.room.find(FIND_STRUCTURES, {
+            filter: (structure) => {
+                return (structure.structureType == STRUCTURE_EXTENSION || structure.structureType == STRUCTURE_SPAWN)
+                    && (structure.energy > creep.carryCapacity);
+            }
+        });
+    }
+    return val;
 };
 
 module.exports = roleBuilder;

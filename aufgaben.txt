@@ -1,8 +1,7 @@
-﻿* Harvester sollen nur noch in den Container die energie geben
-
-* Idle Info für Creeps
-
+﻿* Idle Info für Creeps
 * Controller braucht einen Container
 * Transporter fertig stellen
+* creep Types auslagern
+
 
 * Game.notify - > emails für wichtige Events

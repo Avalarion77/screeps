@@ -5,4 +5,6 @@ module.exports.loop = function () {
     mainBasic.clearMemory();
     mainBasic.runCreeps();
     mainBasic.reproduceCreeps();
+
+    //mainBasic.getCreepInfo();
 } 
