@@ -19,7 +19,7 @@ var mainBasic = {
             }
             
         }
-        else if (getUpgraders() < 2) {
+        else if (getUpgraders() < 3) {
             parts = [WORK, CARRY, MOVE, MOVE];
             costs = getBodyPartCosts(parts);
             if (currentAvailableEnergy >= costs) {
@@ -28,7 +28,7 @@ var mainBasic = {
             }
             
         }
-        else if (getBuilders() < 3) {
+        else if (getBuilders() < 1) {
             parts = [WORK, CARRY, MOVE];
             costs = getBodyPartCosts(parts);
             if (currentAvailableEnergy >= costs) {
