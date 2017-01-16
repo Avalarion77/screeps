@@ -2,16 +2,33 @@ var roleHarvester = require('role.harvester');
 var roleUpgrader = require('role.upgrader');
 var roleBuilder = require('role.builder');
 var roleRepairer = require('role.repair');
+var roleTransporter = require('role.transporter');
 
 var mainBasic = {
 
     reproduceCreeps: function () {
         
         var currentAvailableEnergy = Game.spawns.Avalarion.room.energyAvailable;
+        var countConstructionSites = _.sum(Game.constructionSites, c => c.my);
+        var countRepairSites = Game.spawns.Avalarion.room.find(FIND_STRUCTURES, {
+            filter: (structure) => {
+                return (structure.hits < structure.hitsMax);
+            }
+        }).length;
+
         var parts;
         var costs;
-        if (getHarvesters() < 5) {
-            parts = [WORK, WORK, CARRY, MOVE];
+        if (getHarvesters2() < 1) {
+            parts = [WORK, WORK, WORK, WORK, WORK, MOVE];
+            costs = getBodyPartCosts(parts);
+            if (currentAvailableEnergy >= costs) {
+                console.log('spawn harvester2 costs: ' + costs);
+                Game.spawns.Avalarion.createCreep(parts, undefined, { role: 'harvester2', working: false });
+            }
+
+        }
+        else if (getHarvesters() < 3) {
+            parts = [WORK, WORK, WORK, CARRY, MOVE];
             costs = getBodyPartCosts(parts);
             if (currentAvailableEnergy >= costs) {
                 console.log('spawn harvester costs: ' + costs);
@@ -19,7 +36,7 @@ var mainBasic = {
             }
             
         }
-        else if (getUpgraders() < 2) {
+        else if (getUpgraders() < 4) {
             parts = [WORK, CARRY, MOVE, MOVE];
             costs = getBodyPartCosts(parts);
             if (currentAvailableEnergy >= costs) {
@@ -28,7 +45,8 @@ var mainBasic = {
             }
             
         }
-        else if (getBuilders() < 3) {
+        else if ((countConstructionSites > 0 && getBuilders() < 1)
+                || (countConstructionSites > 3 && getBuilders() < 3)) {
             parts = [WORK, CARRY, MOVE];
             costs = getBodyPartCosts(parts);
             if (currentAvailableEnergy >= costs) {
@@ -37,7 +55,7 @@ var mainBasic = {
             }
             
         }
-        else if (getRepairers() < 1) {
+        else if ((countRepairSites > 0 && getRepairers() < 1) || (countRepairSites > 5 && getRepairers() < 3)) {
             parts = [WORK, CARRY, MOVE];
             costs = getBodyPartCosts(parts);
             if (currentAvailableEnergy >= costs) {
@@ -45,6 +63,15 @@ var mainBasic = {
                 Game.spawns.Avalarion.createCreep(parts, undefined, { role: 'repairer', working: false });
             }
             
+        }
+        else if (getTransporters() < 7) {
+            parts = [CARRY, MOVE, CARRY, MOVE, MOVE, MOVE];
+            costs = getBodyPartCosts(parts);
+            if (currentAvailableEnergy >= costs) {
+                console.log('spawn transporter costs: ' + costs);
+                Game.spawns.Avalarion.createCreep(parts, undefined, { role: 'transporter', working: false });
+            }
+
         }
         
     },
@@ -54,6 +81,11 @@ var mainBasic = {
             var creep = Game.creeps[name];
             if(creep.memory.role == 'harvester') {
                 roleHarvester.run(creep);
+                //creep.say('harvester')
+            }
+            if (creep.memory.role == 'harvester2') {
+                roleHarvester.run(creep);
+                //creep.say('harvester2');
             }
             if(creep.memory.role == 'upgrader') {
                 roleUpgrader.run(creep);
@@ -63,6 +95,10 @@ var mainBasic = {
             }
             if(creep.memory.role == 'repairer') {
                 roleRepairer.run(creep);
+            }
+            if (creep.memory.role == 'transporter') {
+                roleTransporter.run(creep);
+                //creep.say('transporter');
             }
             
         }
@@ -78,6 +114,7 @@ var mainBasic = {
 
     getCreepInfo: function() {
         console.log('current available harvesters: ' + getHarvesters());
+        console.log('current available harvesters2: ' + getHarvesters2());
         console.log('current available upgraders: ' + getUpgraders());
         console.log('current available builders: ' + getBuilders());
         console.log('current available repairers: ' + getRepairers());
@@ -88,6 +125,9 @@ var mainBasic = {
 
 function getHarvesters() {
     return _.sum(Game.creeps, (c) => c.memory.role == 'harvester');
+}
+function getHarvesters2() {
+    return _.sum(Game.creeps, (c) => c.memory.role == 'harvester2');
 }
 function getUpgraders() {
     return _.sum(Game.creeps, (c) => c.memory.role == 'upgrader');
