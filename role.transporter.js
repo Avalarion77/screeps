@@ -36,7 +36,7 @@ var roleTransporter = {
 	            creep.memory.priority = 'standard';
 	        } else if (creep.memory.priority === 'controller' && controllerTransporter < 4) {
 	            target = controllerContainer;
-	        } else if (standardTransporter > 1 && controllerTransporter < 3) {
+	        } else if (standardTransporter > 1 && controllerTransporter < 5) {
 	            target = controllerContainer;
 	            creep.memory.priority = 'controller';
 	        } else {

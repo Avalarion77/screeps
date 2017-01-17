@@ -1,5 +1,6 @@
 var mainBasic = require('main.basic');
-require('creep.prototype')
+require('creep.prototype');
+require('global');
 
 module.exports.loop = function () {
 
@@ -20,7 +21,7 @@ module.exports.loop = function () {
             // check if any container needs repairs
             let repairTargets = tower.room.find(FIND_STRUCTURES, {
                 filter: (structure) => {
-                    return ((structure.structureType == STRUCTURE_RAMPART) && /*structure.hits < 150000 &&*/ structure.hits < structure.hitsMax);
+                    return ((structure.structureType === STRUCTURE_RAMPART) && /*structure.hits < 150000 &&*/ structure.hits < structure.hitsMax);
                 }
             });
 
