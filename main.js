@@ -1,4 +1,5 @@
 var mainBasic = require('main.basic');
+var Attacker = require('role.attacker');
 require('creep.prototype');
 require('global');
 
@@ -8,6 +9,8 @@ module.exports.loop = function () {
     mainBasic.runCreeps();
     mainBasic.reproduceCreeps();
 
+    Attacker.run();
+    
     // Tower
     var HOME = 'E61N86';
     var towers = Game.rooms[HOME].find(FIND_STRUCTURES, {

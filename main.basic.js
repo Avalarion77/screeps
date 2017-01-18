@@ -27,8 +27,18 @@ var mainBasic = {
             }
 
         }
+        else if (getTransporters() < 7) {
+            console.log('need transport')
+            parts = [CARRY, CARRY, MOVE, MOVE];
+            costs = getBodyPartCosts(parts);
+            if (currentAvailableEnergy >= costs) {
+                console.log('spawn transporter costs: ' + costs);
+                Game.spawns.Avalarion.createCreep(parts, undefined, { role: global.CreepJobs.CREEP_JOB_TRANSPORTER, working: false, priority: 'standard' });
+            }
+
+        }
         else if (getHarvesters() < 2) {
-            parts = [WORK, WORK, WORK, WORK, CARRY, MOVE];
+            parts = [WORK, WORK, WORK, CARRY, MOVE];
             costs = getBodyPartCosts(parts);
             if (currentAvailableEnergy >= costs) {
                 console.log('spawn harvester costs: ' + costs);
@@ -37,7 +47,7 @@ var mainBasic = {
             
         }
         else if (getUpgraders() < 3) {
-            parts = [WORK, CARRY, MOVE, MOVE];
+            parts = [WORK, WORK, WORK, CARRY, MOVE];
             costs = getBodyPartCosts(parts);
             if (currentAvailableEnergy >= costs) {
                 console.log('spawn upgrader costs: ' + costs);
@@ -73,6 +83,7 @@ var mainBasic = {
             }
 
         }
+        
         
     },
     
