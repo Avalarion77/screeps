@@ -1,7 +1,10 @@
 ﻿* Idle Info für Creeps
-* Controller braucht einen Container
-* Transporter fertig stellen
 * creep Types auslagern
+* Alert Mode
+** spawn fighter and move them to defend positions
+** track walls an back side
+** make sure tower has energy
 
+* pathfinding verbessern -> creeps brauchen fixes target und Task - änderung nur wenn task beendet oder target ungültig
 
 * Game.notify - > emails für wichtige Events

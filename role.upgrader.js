@@ -18,29 +18,22 @@ var roleUpgrader = {
 	    }
         // need energy
         else {
-            var targets = creep.room.find(FIND_STRUCTURES, {
-                    filter: (structure) => {
-                        return ((structure.structureType == STRUCTURE_EXTENSION && structure.energy > creep.carryCapacity ) 
-                            || (structure.structureType == STRUCTURE_CONTAINER && structure.store[RESOURCE_ENERGY] > creep.carryCapacity));
-                    }
-            });
-            
-            if (targets.length > 0) {
-                var target = creep.pos.findClosestByPath(targets);
+	        var target = creep.getControllerContainer();
+	        if (target) {
                 if(creep.withdraw(target, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
                     creep.moveTo(target);
                 }
             }
             else {
-                let sources = creep.pos.findClosestByPath(creep.room.find(FIND_SOURCES));
-                if(creep.harvest(sources, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                    creep.moveTo(sources);
+                let source = creep.pos.findClosestByPath(creep.getTransportLoadingStations());
+                if(creep.harvest(source, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                    creep.moveTo(source);
                 } 
             }
             
             
         }
-	}
+    }
 };
 
 module.exports = roleUpgrader;

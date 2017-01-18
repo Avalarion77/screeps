@@ -12,25 +12,59 @@ var roleRepairer = {
 	        creep.say('repairing');
 	    }
         
-        var targets = creep.room.find(FIND_STRUCTURES, {
-            filter: (structure) => {
-                return (structure.structureType != STRUCTURE_WALL && structure.hits < structure.hitsMax);
-            }
-        });
+        // check if any container needs repairs
+	    let targets = creep.room.find(FIND_STRUCTURES, {
+	        filter: (structure) => {
+	            return (structure.structureType == STRUCTURE_CONTAINER && structure.hits < structure.hitsMax);
+	        }
+	    });
+        // if no container needs repair find other target
+	    if (targets == 0) {
+	        targets = creep.room.find(FIND_STRUCTURES, {
+	            filter: (structure) => {
+	                return (structure.structureType != STRUCTURE_WALL && structure.hits < structure.hitsMax);
+	            }
+	        });
+	    }
 
         // sorting for lowest hits
         targets.sort((a, b) => a.hits - b.hits);
-
+        let target = creep.pos.findClosestByPath(targets);
         if (creep.memory.working) {
-            var returnValue = creep.repair(targets[0]);
-            if (returnValue == 0) {
+            var returnValue = creep.repair(target);
+
+            if (target === null) {
+                console.log('no targets to repair');
+                // repair walls
+                let walls = creep.room.find(FIND_STRUCTURES, {
+                    filter: (structure) => {
+                        return (structure.structureType == STRUCTURE_WALL && structure.hits < structure.hitsMax);
+                    }
+                });
+
+                // sorting for lowest hits
+                walls.sort((a, b) => a.hits - b.hits);
+
+                let wall = creep.pos.findClosestByPath(walls);
+                returnValue = creep.repair(wall);
+
+                if (returnValue == 0) {
+                    // all fine
+                } else if (returnValue == ERR_NOT_IN_RANGE) {
+                    creep.moveTo(wall);
+                } else {
+                    console.log('Repairer[' + creep.name + '] => wall: [' + wall + ']; working error: ' + returnValue);
+                }
+
+            }
+            else if (returnValue == 0) {
                 // all fine
             }
             else if (returnValue == ERR_NOT_IN_RANGE) {
-                creep.moveTo(targets[0]);
+                creep.moveTo(target);
             }
             else {
-                console.log('Repairer working error: '+returnValue);
+                console.log('Repairer[' + creep.name + '] => target: ['+target+']; working error: ' + returnValue);
             }
             
         }
@@ -39,22 +73,30 @@ var roleRepairer = {
             var returnValue;
             var sources = creep.room.find(FIND_STRUCTURES, {
                 filter: (structure) => {
-                    return ((structure.structureType == STRUCTURE_EXTENSION
-                        || structure.structureType == STRUCTURE_CONTAINER
-                        || structure.structureType == STRUCTURE_SPAWN));
+                    return (structure.structureType == STRUCTURE_CONTAINER && structure.store[RESOURCE_ENERGY] > creep.carryCapacity);
                 }
             });
 
             if (sources.length == 0) {
                 sources = creep.room.find(FIND_SOURCES);
                 returnValue = creep.harvest(sources[0])
-                if (returnValue == ERR_NOT_IN_RANGE) {
+
+                if (returnValue == 0) {
+                    // all fine
+                } else if (returnValue == ERR_NOT_IN_RANGE) {
                     creep.moveTo(sources[0]);
+                } else {
+                    console.log('repairer[' + creep.name + '] harvest energy: ' + returnValue);
                 }
             } else {
                 returnValue = creep.withdraw(sources[0], RESOURCE_ENERGY)
-                if (returnValue == ERR_NOT_IN_RANGE) {
+
+                if (returnValue == 0) {
+                    // all fine
+                } else if (returnValue == ERR_NOT_IN_RANGE) {
                     creep.moveTo(sources[0]);
+                } else {
+                    console.log('repairer[' + creep.name + '] withdraw energy: ' + returnValue);
                 }
             }
             
