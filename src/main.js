@@ -1,24 +1,28 @@
-var mainBasic = require('main.basic');
-var Attacker = require('role.attacker');
-require('creep.prototype');
-require('global');
+const mainBasic = require('src/main.basic');
+const Attacker = require('src/roles/role.attacker');
+require('src/creep.prototype');
+require('src/global');
 
 module.exports.loop = function () {
 
+
     mainBasic.clearMemory();
+
+    Attacker.run(); // TODO: no function behind this at the moment
+
     mainBasic.runCreeps();
     mainBasic.reproduceCreeps();
 
-    Attacker.run();
+
     
     // Tower
-    var HOME = 'E61N86';
-    var towers = Game.rooms[HOME].find(FIND_STRUCTURES, {
-            filter: (s) => s.structureType == STRUCTURE_TOWER
+    const HOME = global.Config.HOME_SYSTEM;
+    const towers = Game.rooms[HOME].find(FIND_STRUCTURES, {
+        filter: (s) => s.structureType === STRUCTURE_TOWER
     });
     for (let tower of towers) {
-        var target = tower.pos.findClosestByRange(FIND_HOSTILE_CREEPS);
-        if (target != undefined) {
+        const target = tower.pos.findClosestByRange(FIND_HOSTILE_CREEPS);
+        if (target !== undefined) {
             tower.attack(target);
         } else {
             // check if any container needs repairs
@@ -40,4 +44,4 @@ module.exports.loop = function () {
     
 
     //mainBasic.getCreepInfo();
-} 
+};

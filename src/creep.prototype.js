@@ -8,14 +8,14 @@ Creep.prototype.getStructureWithLowEnergy = function () {
 
     val = this.room.find(FIND_STRUCTURES, {
         filter: (structure) => {
-            return (structure.structureType == STRUCTURE_EXTENSION || structure.structureType == STRUCTURE_SPAWN || structure.structureType == STRUCTURE_TOWER)
+            return (structure.structureType === STRUCTURE_EXTENSION || structure.structureType === STRUCTURE_SPAWN || structure.structureType === STRUCTURE_TOWER)
                 && (structure.energy < structure.energyCapacity);
         }
     });
-    if (val.length == 0) {
+    if (val.length === 0) {
         val = this.room.find(FIND_STRUCTURES, {
             filter: (structure) => {
-                return (structure.structureType == STRUCTURE_CONTAINER)
+                return (structure.structureType === STRUCTURE_CONTAINER)
                     && (structure.store[RESOURCE_ENERGY] < structure.storeCapacity);
             }
         });
@@ -28,49 +28,50 @@ Creep.prototype.getTransportLoadingStations = function () {
     let targets = this.room.find(FIND_STRUCTURES, {
         filter: (structure) => {
             return (
-                    (structure.structureType == STRUCTURE_CONTAINER && structure.id != '587aa240349ed902205f7a6c')
-                    || structure.structureType == STRUCTURE_STORAGE
+                    (structure.structureType === STRUCTURE_CONTAINER && structure.id !== '587aa240349ed902205f7a6c')
+                    || structure.structureType === STRUCTURE_STORAGE
                 ) && _.sum(structure.store) > structure.storeCapacity / 3;
         }
     });
 
-    // TODO: sorting for highest energy - not working, doesnt sort correctly
+    // TODO: sorting for highest energy - not working, doesn't sort correctly
     targets.sort((a, b) => { _.sum(b.store) - _.sum(a.store) });
     return targets;
 };
 
 Creep.prototype.getTransportDeliveringStations = function () {
     let targets = this.getStructureWithLowEnergy();
-    targets = _.filter(targets, c => c.structureType != STRUCTURE_CONTAINER);
+    targets = _.filter(targets, c => c.structureType !== STRUCTURE_CONTAINER);
     return targets;
 };
 
 Creep.prototype.getControllerContainer = function () {
     let containers = this.room.find(FIND_STRUCTURES, {
         filter: (structure) => {
-            return (structure.structureType == STRUCTURE_CONTAINER);
+            return (structure.structureType === STRUCTURE_CONTAINER);
         }
     });
     console.log('Creep.getControllerContainer' + containers);
     return this.room.controller.pos.findClosestByPath(containers);
-}
+};
+
 Creep.prototype.getClosestEnergyContainer = function () {
     let containers = this.room.find(FIND_STRUCTURES, {
         filter: (structure) => {
-            return (structure.structureType == STRUCTURE_CONTAINER);
+            return (structure.structureType === STRUCTURE_CONTAINER);
         }
     });
     return this.pos.findClosestByPath(containers);
 
-}
+};
 
 Creep.prototype.transferEnergy = function (target) {
-    var returnValue = this.transfer(target, RESOURCE_ENERGY);
+    const returnValue = this.transfer(target, RESOURCE_ENERGY);
     console.log('Creep.transferEnergy[creep: ' + this.name + '|'+this.memory.priority+'] for target ' + target + ' return - ' + returnValue);
-    if (returnValue == 0) {
+    if (returnValue === 0) {
         // all fine
     }
-    else if (returnValue == ERR_NOT_IN_RANGE) {
+    else if (returnValue === ERR_NOT_IN_RANGE) {
         this.moveTo(target);
         console.log('Creep.transferEnergy[creep: ' + this.name + '] move to target ' + target);
     }

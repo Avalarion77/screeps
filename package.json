@@ -1,0 +1,26 @@
+{
+  "name": "screeps",
+  "version": "1.0.0",
+  "description": "Screeps Game Code ",
+  "main": "src/main.js",
+  "dependencies": {
+    "lodash": "latest"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Avalarion77/screeps.git"
+  },
+  "keywords": [
+    "screeps"
+  ],
+  "author": "Thomas Tauchner",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Avalarion77/screeps/issues"
+  },
+  "homepage": "https://github.com/Avalarion77/screeps#readme"
+}
