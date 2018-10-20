@@ -1,7 +1,7 @@
-const mainBasic = require('src/main.basic');
-const Attacker = require('src/roles/role.attacker');
-require('src/creep.prototype');
-require('src/global');
+const mainBasic = require('src_main.basic');
+const Attacker = require('src_roles_role.attacker');
+const global = require('src_global');
+require('src_creep.prototype');
 
 module.exports.loop = function () {
 

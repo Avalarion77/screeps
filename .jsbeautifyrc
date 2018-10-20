@@ -1,0 +1,6 @@
+{
+  "indent_size": 4,
+  "js": {
+    "preserve-newlines": true
+  }
+}

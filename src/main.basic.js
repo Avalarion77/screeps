@@ -1,10 +1,11 @@
-import {LoDashStatic as _} from "lodash/common/math";
+//import {LoDashStatic as _} from "lodash/common/math";
 
-const roleHarvester = require('src/roles/role.harvester');
-const roleUpgrader = require('src/roles/role.upgrader');
-const roleBuilder = require('src/roles/role.builder');
-const roleRepairer = require('src/roles/role.repair');
-const roleTransporter = require('src/roles/role.transporter');
+const roleHarvester = require('src_roles_role.harvester');
+const roleUpgrader = require('src_roles_role.upgrader');
+const roleBuilder = require('src_roles_role.builder');
+const roleRepairer = require('src_roles_role.repair');
+const roleTransporter = require('src_roles_role.transporter');
+const global = require('src_global');
 
 const mainBasic = {
 
