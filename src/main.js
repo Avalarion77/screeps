@@ -1,17 +1,18 @@
-const mainBasic = require('src_main.basic');
-const Attacker = require('src_roles_role.attacker');
-const global = require('src_global');
-require('src_creep.prototype');
+const mainBasic = require('main.basic');
+const Attacker = require('roles_role.attacker');
+const global = require('global');
+require('creep.prototype');
 
 module.exports.loop = function () {
 
 
     mainBasic.clearMemory();
 
-    Attacker.run(); // TODO: no function behind this at the moment
-
+    // TODO: no function behind this at the moment
+    //Attacker.run();
+    mainBasic.checkNeedCreeps();
     mainBasic.runCreeps();
-    mainBasic.reproduceCreeps();
+    //mainBasic.reproduceCreeps();
 
 
     

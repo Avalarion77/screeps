@@ -21,6 +21,19 @@ const roleHarvester = {
                 console.log('harvester[' + creep.name + '] harvest error: ' + result);
             }
         }
+        /* Harvester move  */
+        else if (creep.carry.energy === creep.carryCapacity) {
+            let target = creep.getTransportDeliveringStations();
+            if (target) {
+                //console.log('harvester - bring energy to: ' + target);
+                creep.transferEnergy(target);
+            }
+        }
+
+        if (creep.room.find(FIND_STRUCTURES, filter((s) => s.structureType === STRUCTURE_CONTAINER && s.memory.forSource === creep.memory.source))) {
+
+        }
+
         /* Harvester transfer Energy */
         else {
             // find all Container & Extensions & Spawn structures in this room that has no full energy
@@ -32,7 +45,10 @@ const roleHarvester = {
             if (target) {
                 //console.log('harvester - bring energy to: ' + target);
                 creep.transferEnergy(target);
+            } else {
+
             }
+
         }
     }
 };

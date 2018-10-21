@@ -34,8 +34,8 @@ Creep.prototype.getTransportLoadingStations = function () {
         }
     });
 
-    // TODO: sorting for highest energy - not working, doesn't sort correctly
-    targets.sort((a, b) => { _.sum(b.store) - _.sum(a.store) });
+    // TODO: sorting for highest energy - not working, doesn't sort correctly => changed: need to test
+    targets.sort((a, b) => _.sum(b.store) - _.sum(a.store) );
     return targets;
 };
 
