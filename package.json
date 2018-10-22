@@ -4,6 +4,7 @@
   "description": "Screeps Game Code ",
   "main": "src/main.js",
   "dependencies": {
+    "grunt-contrib-concat": "^1.0.1",
     "lodash": "latest"
   },
   "devDependencies": {

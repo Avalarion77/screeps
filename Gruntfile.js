@@ -109,7 +109,7 @@ module.exports = function (grunt) {
             versioning: {
                 files: [
                     {
-                        append: "\nglobal.SCRIPT_VERSION = "+ currentDate.getTime() + "\n",
+                        append: "\nglobal.SCRIPT_VERSION = "+ currentDate.getTime() + ";\n",
                         input: 'dist/version.js',
                     }
                 ]
@@ -140,9 +140,10 @@ module.exports = function (grunt) {
     });
 
     // Combine the above into a default task
-    grunt.registerTask('build',         ['clean', 'copy:screeps']);
+    grunt.registerTask('build',         ['clean', 'copy:screeps', 'file_append']);
     grunt.registerTask('full-deploy',   ['clean', 'copy:screeps', 'concat', 'file_append', 'screeps']);
-    grunt.registerTask('raw',           ['clean', 'copy:screeps', 'screeps']);
+    grunt.registerTask('deploy',        ['clean', 'copy:screeps', 'screeps']);
+    grunt.registerTask('private',       ['clean', 'copy:screeps', 'rsync:private']);
     grunt.registerTask('package',       ['clean', 'copy:screeps', 'concat', 'file_append']);
     grunt.registerTask('test',          ['jsbeautifier:verify']);
     grunt.registerTask('pretty',        ['jsbeautifier:modify']);

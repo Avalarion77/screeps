@@ -16,8 +16,8 @@ module.exports.loop = function() {
 
 
 
-    // Tower
-    const HOME = global.Config.HOME_SYSTEM;
+    // TODO: Tower
+    /*const HOME = global.Config.HOME_SYSTEM;
     const towers = Game.rooms[HOME].find(FIND_STRUCTURES, {
         filter: (s) => s.structureType === STRUCTURE_TOWER
     });
@@ -29,7 +29,7 @@ module.exports.loop = function() {
             // check if any container needs repairs
             let repairTargets = tower.room.find(FIND_STRUCTURES, {
                 filter: (structure) => {
-                    return ((structure.structureType === STRUCTURE_RAMPART) && /*structure.hits < 150000 &&*/ structure.hits < structure.hitsMax);
+                    return ((structure.structureType === STRUCTURE_RAMPART) && /!*structure.hits < 150000 &&*!/ structure.hits < structure.hitsMax);
                 }
             });
 
@@ -40,7 +40,7 @@ module.exports.loop = function() {
                 tower.repair(repairTargets[0]);
             }
         }
-    }
+    }*/
 
 
 

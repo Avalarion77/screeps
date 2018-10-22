@@ -30,8 +30,20 @@ const roleHarvester = {
             }
         }
 
-        if (creep.room.find(FIND_STRUCTURES, filter((s) => s.structureType === STRUCTURE_CONTAINER && s.memory.forSource === creep.memory.source))) {
+        if (creep.room.find(FIND_STRUCTURES, {
+                filter: ((s) => s.structureType === STRUCTURE_CONTAINER && s.memory.forSource === creep.memory.source)
+            })) {
+            console.log('need container');
+            // TODO: location logic
+            let status = creep.room.createConstructionSite(creep.pos.x - 1, creep.pos.y - 1, STRUCTURE_CONTAINER);
+            console.log('status createConstructionSite: ' + status);
+            // TODO: handle error code
 
+            // TODO: add sourceId to site
+
+            // TODO: start building
+
+            // TODO: if finished -> save creep.memory.source in container.memory.forSource
         }
 
         /* Harvester transfer Energy */

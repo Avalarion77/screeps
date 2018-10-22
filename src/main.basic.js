@@ -17,8 +17,28 @@ const mainBasic = {
             }
             this.isRoomEnergyHarvested();
         }
+
+        // TODO: is construction side available
+        if (_.size(Game.constructionSites) > 0) {
+            // TODO: ERROR -> no valid object
+            this.needBuilder(Game.constructionSites[0]);
+        }
     },
 
+    needBuilder: function(cs) {
+        const currentAvailableEnergy = cs.room.energyAvailable;
+        let parts = [WORK, CARRY, MOVE];
+        let costs = getBodyPartCosts(parts);
+        if (currentAvailableEnergy >= costs) {
+            console.log('spawn harvester costs: ' + costs);
+            Game.spawns.Avalarion.spawnCreep(parts, undefined, {
+                memory: {
+                    role: global.CreepJobs.CREEP_JOB_BUILDER,
+                    working: false
+                }
+            });
+        }
+    },
     sourceNeedHarvester: function(countActiveHarvester, source) {
         console.log(countActiveHarvester);
         console.log(source);
