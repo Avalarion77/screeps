@@ -1,7 +1,7 @@
 const roleHarvester = {
 
     /** @param {Creep} creep **/
-    run: function (creep) {
+    run: function(creep) {
         /* Harvester get Energy */
         if (creep.memory.role === 'harvester2' || creep.carry.energy < creep.carryCapacity) {
             const sources = creep.room.find(FIND_SOURCES);

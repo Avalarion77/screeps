@@ -1,7 +1,7 @@
 const roleBuilder = {
 
     /** @param {Creep} creep **/
-    run: function (creep) {
+    run: function(creep) {
 
         setStatus(creep);
 

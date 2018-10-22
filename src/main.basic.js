@@ -7,7 +7,7 @@ const global = require('global');
 
 const mainBasic = {
 
-    checkNeedCreeps: function () {
+    checkNeedCreeps: function() {
         // TODO: is energy harvested ?
         for (let spawn in Game.spawns) {
             let sources = Game.spawns[spawn].room.find(FIND_SOURCES);
@@ -19,11 +19,11 @@ const mainBasic = {
         }
     },
 
-    sourceNeedHarvester: function (countActiveHarvester, source) {
+    sourceNeedHarvester: function(countActiveHarvester, source) {
         console.log(countActiveHarvester);
         console.log(source);
         console.log(source.room.controller.level);
-        switch(source.room.controller.level) {
+        switch (source.room.controller.level) {
             case 0:
             case 1:
                 if (countActiveHarvester < 2) {
@@ -46,11 +46,11 @@ const mainBasic = {
 
     },
 
-    isRoomEnergyHarvested: function (room) {
+    isRoomEnergyHarvested: function(room) {
 
     },
 
-    reproduceCreeps: function () {
+    reproduceCreeps: function() {
 
         const currentAvailableEnergy = Game.spawns.Avalarion.room.energyAvailable;
         const countConstructionSites = _.sum(Game.constructionSites, c => c.my);
@@ -73,8 +73,7 @@ const mainBasic = {
                 });
             }
 
-        }
-        else if (getCountTransporters() < 7) {
+        } else if (getCountTransporters() < 7) {
             console.log('need transport');
             parts = [CARRY, CARRY, MOVE, MOVE];
             costs = getBodyPartCosts(parts);
@@ -87,8 +86,7 @@ const mainBasic = {
                 });
             }
 
-        }
-        else if (getCountHarvesters() < 2) {
+        } else if (getCountHarvesters() < 2) {
             parts = [WORK, WORK, WORK, CARRY, MOVE];
             costs = getBodyPartCosts(parts);
             if (currentAvailableEnergy >= costs) {
@@ -99,8 +97,7 @@ const mainBasic = {
                 });
             }
 
-        }
-        else if (getCountUpgraders() < 3) {
+        } else if (getCountUpgraders() < 3) {
             parts = [WORK, WORK, WORK, CARRY, MOVE];
             costs = getBodyPartCosts(parts);
             if (currentAvailableEnergy >= costs) {
@@ -111,9 +108,8 @@ const mainBasic = {
                 });
             }
 
-        }
-        else if ((countConstructionSites > 0 && getCountBuilders() < 1)
-            || (countConstructionSites > 3 && getCountBuilders() < 3)) {
+        } else if ((countConstructionSites > 0 && getCountBuilders() < 1) ||
+            (countConstructionSites > 3 && getCountBuilders() < 3)) {
             parts = [WORK, CARRY, MOVE];
             costs = getBodyPartCosts(parts);
             if (currentAvailableEnergy >= costs) {
@@ -124,8 +120,7 @@ const mainBasic = {
                 });
             }
 
-        }
-        else if ((countRepairSites > 0 && getCountRepairers() < 1) || (countRepairSites > 5 && getCountRepairers() < 3)) {
+        } else if ((countRepairSites > 0 && getCountRepairers() < 1) || (countRepairSites > 5 && getCountRepairers() < 3)) {
             parts = [WORK, CARRY, MOVE];
             costs = getBodyPartCosts(parts);
             if (currentAvailableEnergy >= costs) {
@@ -136,8 +131,7 @@ const mainBasic = {
                 });
             }
 
-        }
-        else if (getCountTransporters() < 7) {
+        } else if (getCountTransporters() < 7) {
             parts = [CARRY, CARRY, CARRY, MOVE, MOVE, MOVE];
             costs = getBodyPartCosts(parts);
             if (currentAvailableEnergy >= costs) {
@@ -153,7 +147,7 @@ const mainBasic = {
 
     },
 
-    runCreeps: function () {
+    runCreeps: function() {
         for (let name in Game.creeps) {
             if (Game.creeps.hasOwnProperty(name)) {
                 let creep = Game.creeps[name];
@@ -186,7 +180,7 @@ const mainBasic = {
         }
     },
 
-    clearMemory: function () {
+    clearMemory: function() {
         for (let name in Memory.creeps) {
             if (!Game.creeps.hasOwnProperty(name) && Memory.creeps.hasOwnProperty(name)) {
                 // TODO: Update mainMemory
@@ -196,7 +190,7 @@ const mainBasic = {
         }
     },
 
-    getCreepInfo: function () {
+    getCreepInfo: function() {
         console.log('current available harvesters: ' + getCountHarvesters());
         console.log('current available harvesters2: ' + getCountHarvesters2());
         console.log('current available upgraders: ' + getCountUpgraders());
@@ -211,47 +205,45 @@ const mainBasic = {
 function getCountHarvesters() {
     return _.size(Game.creeps, (c) => c.memory.role === global.CreepJobs.CREEP_JOB_HARVESTER);
 }
+
 function getCountHarvesters2() {
     return _.size(Game.creeps, (c) => c.memory.role === global.CreepJobs.CREEP_JOB_HARVESTER_2);
 }
+
 function getCountUpgraders() {
     return _.size(Game.creeps, (c) => c.memory.role === global.CreepJobs.CREEP_JOB_UPGRADER);
 }
+
 function getCountBuilders() {
     return _.size(Game.creeps, (c) => c.memory.role === global.CreepJobs.CREEP_JOB_BUILDER);
 }
+
 function getCountRepairers() {
     return _.size(Game.creeps, (c) => c.memory.role === global.CreepJobs.CREEP_JOB_REPAIRER);
 }
+
 function getCountTransporters() {
     return _.size(Game.creeps, (c) => c.memory.role === global.CreepJobs.CREEP_JOB_TRANSPORTER);
 }
 
 function getBodyPartCosts(harvesterParts) {
     let costs = 0;
-    harvesterParts.forEach(function (part) {
+    harvesterParts.forEach(function(part) {
         if (part === WORK) {
             costs += BODYPART_COST.work;
-        }
-        else if (part === MOVE) {
+        } else if (part === MOVE) {
             costs += BODYPART_COST.move;
-        }
-        else if (part === CARRY) {
+        } else if (part === CARRY) {
             costs += BODYPART_COST.carry;
-        }
-        else if (part === ATTACK) {
+        } else if (part === ATTACK) {
             costs += BODYPART_COST.attack;
-        }
-        else if (part === RANGED_ATTACK) {
+        } else if (part === RANGED_ATTACK) {
             costs += BODYPART_COST.ranged_attack;
-        }
-        else if (part === HEAL) {
+        } else if (part === HEAL) {
             costs += BODYPART_COST.heal;
-        }
-        else if (part === CLAIM) {
+        } else if (part === CLAIM) {
             costs += BODYPART_COST.claim;
-        }
-        else if (part === TOUGH) {
+        } else if (part === TOUGH) {
             costs += BODYPART_COST.tough;
         }
     });

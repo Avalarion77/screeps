@@ -1,8 +1,6 @@
-
-
 const mainMemory = {
 
-    storeBasicInformation: function () {
+    storeBasicInformation: function() {
 
 
 

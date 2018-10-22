@@ -1,7 +1,7 @@
 const roleTransporter = {
 
     /** @param {Creep} creep **/
-    run: function (creep) {
+    run: function(creep) {
         const transportCapacity = creep.carryCapacity;
 
         //console.log('transporter[' + creep.name + '] transportCapacity: ' + transportCapacity);

@@ -1,7 +1,7 @@
 const roleRepairer = {
 
     /** @param {Creep} creep **/
-    run: function (creep) {
+    run: function(creep) {
 
         let returnValue;
         if (creep.memory.working && creep.carry.energy === 0) {
@@ -57,14 +57,11 @@ const roleRepairer = {
                     console.log('Repairer[' + creep.name + '] => wall: [' + wall + ']; working error: ' + returnValue);
                 }
 
-            }
-            else if (returnValue === 0) {
+            } else if (returnValue === 0) {
                 // all fine
-            }
-            else if (returnValue === ERR_NOT_IN_RANGE) {
+            } else if (returnValue === ERR_NOT_IN_RANGE) {
                 creep.moveTo(target);
-            }
-            else {
+            } else {
                 console.log('Repairer[' + creep.name + '] => target: [' + target + ']; working error: ' + returnValue);
             }
 

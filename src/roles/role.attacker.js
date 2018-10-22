@@ -9,7 +9,7 @@
 
 module.exports = {
     run: function() {
-        
+
         return console.log('ich bin ein Attacker!');
     }
 

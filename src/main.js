@@ -3,7 +3,7 @@ const Attacker = require('roles_role.attacker');
 const global = require('global');
 require('creep.prototype');
 
-module.exports.loop = function () {
+module.exports.loop = function() {
 
 
     mainBasic.clearMemory();
@@ -15,7 +15,7 @@ module.exports.loop = function () {
     //mainBasic.reproduceCreeps();
 
 
-    
+
     // Tower
     const HOME = global.Config.HOME_SYSTEM;
     const towers = Game.rooms[HOME].find(FIND_STRUCTURES, {
@@ -42,7 +42,7 @@ module.exports.loop = function () {
         }
     }
 
-    
+
 
     //mainBasic.getCreepInfo();
 };

@@ -1,4 +1,4 @@
-﻿const global = {
+const global = {
     Const: require("const"),
     CreepJobs: {
         CREEP_JOB_HARVESTER: 'harvester',

@@ -1,15 +1,21 @@
 module.exports = function (grunt) {
-    require('time-grunt')(grunt);
 
     // Pull defaults (including username and password) from .screeps.json
-
     const config = require('./.screeps.json');
+    if(!config.branch) {
+        config.branch = 'sim'
+    }
+
+    if(!config.ptr) {
+        config.ptr = false
+    }
+
     // Allow grunt options to override default configuration
     const branch = grunt.option('branch') || config.branch;
     const email = grunt.option('email') || config.email;
     const password = grunt.option('password') || config.password;
     const ptr = grunt.option('ptr') ? true : config.ptr;
-    let private_directory = grunt.option('private_directory') || config.private_directory;
+    const private_directory = grunt.option('private_directory') || config.private_directory;
 
 
     let currentDate = new Date();
@@ -19,15 +25,14 @@ module.exports = function (grunt) {
     // Load needed tasks
     grunt.loadNpmTasks('grunt-screeps');
     grunt.loadNpmTasks('grunt-contrib-clean');
+    grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-file-append');
     grunt.loadNpmTasks("grunt-jsbeautifier");
     grunt.loadNpmTasks("grunt-rsync");
 
     grunt.initConfig({
-
-        // Push all files in the dist folder to screeps. What is in the dist folder
-        // and gets sent will depend on the tasks used.
+        // Push all files in the dist folder to screeps
         screeps: {
             options: {
                 email: email,
@@ -40,6 +45,26 @@ module.exports = function (grunt) {
             }
         },
 
+
+        // Combine groups of files to reduce the calls to 'require'
+        concat: {
+            // Merge together additions to the default game objects into one file
+            extends: {
+                src: ['dist/extend_*.js'],
+                dest: 'dist/_extensions_packaged.js',
+            },
+
+            // Merge ScreepsOS into a single file in the specified order
+            sos: {
+                options: {
+                    banner: "var skip_includes = true\n\n",
+                    separator: "\n\n\n",
+                },
+                // Do not include console! It has to be redefined each tick
+                src: ['dist/sos_config.js', 'dist/sos_interrupt.js', 'dist/sos_process.js', 'dist/sos_scheduler.js', 'dist/sos_kernel.js'],
+                dest: 'dist/_sos_packaged.js',
+            }
+        },
 
         // Copy all source files into the dist folder, flattening the folder
         // structure by converting path delimiters to underscores
@@ -57,7 +82,7 @@ module.exports = function (grunt) {
                         // Change the path name utilize underscores for folders
                         return dest + src.replace(/\//g,'_');
                     }
-                }],
+                }]
             }
         },
 
@@ -75,7 +100,7 @@ module.exports = function (grunt) {
                     src: './dist/',
                     dest: private_directory,
                 }
-            },
+            }
         },
 
 
@@ -91,12 +116,10 @@ module.exports = function (grunt) {
             }
         },
 
-
-        // Remove all files from the dist folder.
+        // Clean the dist folder.
         clean: {
             'dist': ['dist']
         },
-
 
         // Apply code styling
         jsbeautifier: {
@@ -114,13 +137,13 @@ module.exports = function (grunt) {
                 }
             }
         }
-
     });
 
     // Combine the above into a default task
-    grunt.registerTask('build',  ['clean', 'copy:screeps']);
-    grunt.registerTask('default',  ['clean', 'copy:screeps',  'screeps']);
-    grunt.registerTask('private',  ['clean', 'copy:screeps',  'rsync:private']);
-    grunt.registerTask('test',     ['jsbeautifier:verify']);
-    grunt.registerTask('pretty',   ['jsbeautifier:modify']);
+    grunt.registerTask('build',         ['clean', 'copy:screeps']);
+    grunt.registerTask('full-deploy',   ['clean', 'copy:screeps', 'concat', 'file_append', 'screeps']);
+    grunt.registerTask('raw',           ['clean', 'copy:screeps', 'screeps']);
+    grunt.registerTask('package',       ['clean', 'copy:screeps', 'concat', 'file_append']);
+    grunt.registerTask('test',          ['jsbeautifier:verify']);
+    grunt.registerTask('pretty',        ['jsbeautifier:modify']);
 };

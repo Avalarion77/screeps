@@ -1,7 +1,7 @@
 const creepTypes = {
 
     /** @param {Creep} creep **/
-    getHarvester: function (creep) {
+    getHarvester: function(creep) {
 
         if (currentAvailableEnergy >= 200) {
 
