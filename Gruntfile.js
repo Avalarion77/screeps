@@ -30,6 +30,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-file-append');
     grunt.loadNpmTasks("grunt-jsbeautifier");
     grunt.loadNpmTasks("grunt-rsync");
+    grunt.loadNpmTasks('grunt-shell');
 
     grunt.initConfig({
         // Push all files in the dist folder to screeps
@@ -103,6 +104,14 @@ module.exports = function (grunt) {
             }
         },
 
+        shell: {
+            ps: {
+                options: {
+                    stdout: true
+                },
+                command: 'powershell ./shell.ps1'
+            }
+        },
 
         // Add version variable using current timestamp.
         file_append: {
@@ -144,6 +153,7 @@ module.exports = function (grunt) {
     grunt.registerTask('full-deploy',   ['clean', 'copy:screeps', 'concat', 'file_append', 'screeps']);
     grunt.registerTask('deploy',        ['clean', 'copy:screeps', 'screeps']);
     grunt.registerTask('private',       ['clean', 'copy:screeps', 'rsync:private']);
+    grunt.registerTask('private-windows', ['clean', 'copy:screeps', 'shell:ps']);
     grunt.registerTask('package',       ['clean', 'copy:screeps', 'concat', 'file_append']);
     grunt.registerTask('test',          ['jsbeautifier:verify']);
     grunt.registerTask('pretty',        ['jsbeautifier:modify']);
