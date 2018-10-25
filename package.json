@@ -3,8 +3,12 @@
   "version": "1.0.0",
   "description": "Screeps Game Code ",
   "main": "src/main.js",
+  "scripts": {
+    "tta": "grunt deploy-local"
+  },
   "dependencies": {
     "grunt-contrib-concat": "^1.0.1",
+    "grunt-remove-logging": "^0.2.0",
     "lodash": "latest"
   },
   "devDependencies": {
@@ -17,10 +21,8 @@
     "grunt-rsync": "^3.0.0",
     "grunt-screeps": "^1.4.0",
     "grunt-shell": "^2.1.0",
+    "grunt-stripcomments": "^0.7.2",
     "time-grunt": "^1.4.0"
-  },
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",

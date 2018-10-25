@@ -31,6 +31,8 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks("grunt-jsbeautifier");
     grunt.loadNpmTasks("grunt-rsync");
     grunt.loadNpmTasks('grunt-shell');
+    grunt.loadNpmTasks('grunt-stripcomments');
+    grunt.loadNpmTasks("grunt-remove-logging");
 
     grunt.initConfig({
         // Push all files in the dist folder to screeps
@@ -145,16 +147,39 @@ module.exports = function (grunt) {
                     config: '.jsbeautifyrc'
                 }
             }
+        },
+
+        comments: {
+            dist: {
+                // Target-specific file lists and/or options go here.
+                options: {
+                    singleline: true,
+                    multiline: true,
+                    keepSpecialComments: false
+                },
+                src: [ 'dist/*.js'] // files to remove comments from
+            }
+        },
+
+        removelogging: {
+            dist: {
+                src: "dist/**/*.js" // Each file will be overwritten with the output!
+            }
         }
     });
 
     // Combine the above into a default task
-    grunt.registerTask('build',         ['clean', 'copy:screeps', 'file_append']);
-    grunt.registerTask('full-deploy',   ['clean', 'copy:screeps', 'concat', 'file_append', 'screeps']);
-    grunt.registerTask('deploy',        ['clean', 'copy:screeps', 'screeps']);
-    grunt.registerTask('private',       ['clean', 'copy:screeps', 'rsync:private']);
-    grunt.registerTask('private-windows', ['clean', 'copy:screeps', 'shell:ps']);
-    grunt.registerTask('package',       ['clean', 'copy:screeps', 'concat', 'file_append']);
+    grunt.registerTask('build',         ['clean', 'copy:screeps', 'comments:dist', 'file_append']);
+    grunt.registerTask('deploy-live',   ['screeps']);
+    grunt.registerTask('private',       ['rsync:private']);
+    grunt.registerTask('private-windows', ['shell:ps']);
     grunt.registerTask('test',          ['jsbeautifier:verify']);
     grunt.registerTask('pretty',        ['jsbeautifier:modify']);
+
+    grunt.registerTask('deploy', 'deploys current version on server', function(){
+        grunt.task.run('build', 'deploy-live');
+    });
+    grunt.registerTask('deploy-local', 'deploys current version on server', function(){
+        grunt.task.run('build', 'private-windows');
+    });
 };
