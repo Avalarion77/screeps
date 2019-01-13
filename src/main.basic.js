@@ -21,6 +21,10 @@ const mainBasic = {
             // find all Sources in room (currently working because there is only 1 spawn / room
             let sources = Game.spawns[spawn].room.find(FIND_SOURCES);
             for (let source in sources) {
+                if (sources[source].id === '2ccc0d161cc954070ffc5df0') {
+                    continue; // Enemy creeps will kill us
+                }
+
                 let harvestersForSource = getCountHarvestersBySource(sources[source].id)
                 if (!(getCountHarvesters() > 0 && needMinimumBuilders) && harvestersForSource < 3) {
                     console.log('current: ' + harvestersForSource + ', id:' + sources[source].id);
@@ -213,8 +217,8 @@ const mainBasic = {
                     }});
             }
 
-        } else*/ if (getCountUpgraders() < 3) {
-            parts = [WORK, WORK, WORK, CARRY, MOVE];
+        } else*/ if (getCountUpgraders() < 1) {
+            parts = [WORK, CARRY, MOVE];
             costs = getBodyPartCosts(parts);
             if (currentAvailableEnergy >= costs) {
                 console.log('spawn upgrader costs: ' + costs);

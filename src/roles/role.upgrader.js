@@ -15,16 +15,20 @@ const roleUpgrader = {
             let target = creep.room.controller;
 
             if (target instanceof StructureController && creep.upgradeController(creep.room.controller) === ERR_NOT_IN_RANGE) {
-                creep.moveTo(target);
+
+                creep.moveTo(target.pos.x, target.pos.y);
             }
         } else { // need energy
             const target = creep.getControllerContainer();
-            if (target) {
+            if (target !== null) {
                 if (creep.withdraw(target, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
                     creep.moveTo(target);
                 }
             } else {
+
                 let source = creep.pos.findClosestByPath(creep.getTransportLoadingStations());
+                if (source === null) source = creep.pos.findClosestByPath(creep.getStartingLoadingStations());
+                console.log('upgrader - need energy: '+creep.getStartingLoadingStations() + ' - '+ source);
                 if (creep.harvest(source) === ERR_NOT_IN_RANGE) {
                     creep.moveTo(source);
                 }

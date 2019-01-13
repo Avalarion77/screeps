@@ -9,20 +9,15 @@ const roleBuilder = {
         const construction = creep.pos.findClosestByPath(creep.room.find(FIND_CONSTRUCTION_SITES));
         let returnValue;
         if (creep.memory.working) {
-            console.log('Builder - build: ' + construction);
             if (creep.build(construction) === ERR_NOT_IN_RANGE) {
-                console.log('Builder - move to: ' + construction);
                 creep.moveTo(construction);
             }
         }
         // need energy
         else {
-            console.log('Builder - need energy');
             let sources = creep.getTransportLoadingStations();
-            console.log('getTransportLoadingStations: '+ sources);
             if (_.size(sources) < 1) {
                 sources = creep.getStartingLoadingStations();
-                console.log('getStartingLoadingStations: '+ sources);
             }
             const source = creep.pos.findClosestByPath(sources);
             if (source != null) {
