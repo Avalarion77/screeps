@@ -3,17 +3,21 @@ const roleHarvester = {
     /** @param {Creep} creep **/
     run: function(creep) {
         /* Harvester get Energy */
-        if (creep.memory.role === 'harvester2' || creep.carry.energy < creep.carryCapacity) {
-            const sources = creep.room.find(FIND_SOURCES);
-            let harvestResource = sources[0];
-            if (creep.memory.role === 'harvester2') {
-                harvestResource = sources[1];
-            }
+        if ((creep.memory.role === 'harvester' || creep.memory.role === 'harvester2' )
+            && creep.carry.energy < creep.carryCapacity) {
+
+            // select resource to harvest
+            let harvestResource = Game.getObjectById(creep.memory.source);
+
+            // Harvest resource
             const result = creep.harvest(harvestResource);
+
+            // Status Check
             if (result === OK) {
                 // All fine
+                // TODO: check if there is an container and create constructionsite if not
+                this.buildContainerIfNeeded(creep);
             } else if (result === ERR_NOT_IN_RANGE) {
-                //console.log('debug harvester - not in range - resource: '+harvestResource);
                 creep.moveTo(harvestResource);
             } else if (result === ERR_NOT_ENOUGH_RESOURCES) {
                 // no more energy in resource
@@ -23,27 +27,11 @@ const roleHarvester = {
         }
         /* Harvester move  */
         else if (creep.carry.energy === creep.carryCapacity) {
-            let target = creep.getTransportDeliveringStations();
+            let targets = creep.getTransportDeliveringStations();
+            let target = creep.pos.findClosestByPath(targets)
             if (target) {
-                //console.log('harvester - bring energy to: ' + target);
                 creep.transferEnergy(target);
             }
-        }
-
-        if (creep.room.find(FIND_STRUCTURES, {
-                filter: ((s) => s.structureType === STRUCTURE_CONTAINER && s.memory.forSource === creep.memory.source)
-            })) {
-            console.log('need container');
-            // TODO: location logic
-            let status = creep.room.createConstructionSite(creep.pos.x - 1, creep.pos.y - 1, STRUCTURE_CONTAINER);
-            console.log('status createConstructionSite: ' + status);
-            // TODO: handle error code
-
-            // TODO: add sourceId to site
-
-            // TODO: start building
-
-            // TODO: if finished -> save creep.memory.source in container.memory.forSource
         }
 
         /* Harvester transfer Energy */
@@ -61,6 +49,26 @@ const roleHarvester = {
 
             }
 
+        }
+    },
+    
+    buildContainerIfNeeded: function (creep) {
+        let existingContainer = creep.room.find(FIND_STRUCTURES, {
+            filter: ((s) => s.structureType === STRUCTURE_CONTAINER && s.memory.source === creep.memory.source)
+        });
+
+        if (_.size(existingContainer) === 0) {
+            // TODO: location logic
+            let status = creep.room.createConstructionSite(creep.pos.x, creep.pos.y, STRUCTURE_CONTAINER);
+            console.log('status createConstructionSite: ' + status);
+            // TODO: handle error code
+
+            // TODO: add sourceId to site
+
+
+            // TODO: start building
+
+            // TODO: if finished -> save creep.memory.source in container.memory.forSource
         }
     }
 };

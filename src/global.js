@@ -10,8 +10,16 @@ const global = {
         CREEP_JOB_UPGRADER: 'upgrader'
     },
     Config: {
-        HOME_SYSTEM: 'E61N86'
-    }
+        HOME_SYSTEM: 'E61N86',
+        HOME_SPAWN_NAME: 'Spawn1'
+    },
+    Systems: [{
+         System: {
+             ID: '',
+             SPAWN_IDS: [],
+
+         }
+    }]
 };
 
 module.exports = global;

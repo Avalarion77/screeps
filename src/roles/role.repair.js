@@ -35,7 +35,6 @@ const roleRepairer = {
             returnValue = creep.repair(target);
 
             if (target === null) {
-                console.log('no targets to repair');
                 // repair walls
                 let walls = creep.room.find(FIND_STRUCTURES, {
                     filter: (structure) => {

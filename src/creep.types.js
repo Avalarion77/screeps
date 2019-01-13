@@ -9,7 +9,6 @@ const creepTypes = {
                 role: global.CreepJobs.CREEP_JOB_HARVESTER,
                 working: false
             });
-            console.log('spawn harvester');
         }
     }
 };

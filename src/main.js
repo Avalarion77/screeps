@@ -3,16 +3,21 @@ const Attacker = require('roles_role.attacker');
 const global = require('global');
 require('creep.prototype');
 
+const HOME = global.Config.HOME_SYSTEM;
+
 module.exports.loop = function() {
 
 
     mainBasic.clearMemory();
+    // Danger! https://screeps.com/forum/topic/942/creeps-spawning-without-memory/9
+    mainBasic.updateMemory();
+    Memory.global =  global;
 
     // TODO: no function behind this at the moment
     //Attacker.run();
     mainBasic.checkNeedCreeps();
     mainBasic.runCreeps();
-    //mainBasic.reproduceCreeps();
+    mainBasic.reproduceCreeps();
 
 
 
