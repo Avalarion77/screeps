@@ -25,7 +25,7 @@ module.exports = function (grunt) {
     // Load needed tasks
     grunt.loadNpmTasks('grunt-screeps');
     grunt.loadNpmTasks('grunt-contrib-clean');
-    grunt.loadNpmTasks('grunt-contrib-concat');
+    grunt.loadNpmTasks('grunt-string-replace');
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-file-append');
     grunt.loadNpmTasks("grunt-jsbeautifier");
@@ -48,27 +48,6 @@ module.exports = function (grunt) {
             }
         },
 
-
-        // Combine groups of files to reduce the calls to 'require'
-        concat: {
-            // Merge together additions to the default game objects into one file
-            extends: {
-                src: ['dist/extend_*.js'],
-                dest: 'dist/_extensions_packaged.js',
-            },
-
-            // Merge ScreepsOS into a single file in the specified order
-            sos: {
-                options: {
-                    banner: "var skip_includes = true\n\n",
-                    separator: "\n\n\n",
-                },
-                // Do not include console! It has to be redefined each tick
-                src: ['dist/sos_config.js', 'dist/sos_interrupt.js', 'dist/sos_process.js', 'dist/sos_scheduler.js', 'dist/sos_kernel.js'],
-                dest: 'dist/_sos_packaged.js',
-            }
-        },
-
         // Copy all source files into the dist folder, flattening the folder
         // structure by converting path delimiters to underscores
         copy: {
@@ -86,6 +65,30 @@ module.exports = function (grunt) {
                         return dest + src.replace(/\//g,'_');
                     }
                 }]
+            }
+        },
+
+        // replace require path for flatten structure
+        'string-replace': {
+            dist: {
+                files: {
+                    'dist/': 'dist/**'
+                },
+                options: {
+                    replacements: [{
+                        pattern: /(require\('\/src\/)/g,
+                        replacement: 'require(\''
+                    }, {
+                        pattern: /(require\('controller\/)/g,
+                        replacement: 'require(\'controller_'
+                    }, {
+                        pattern: /(require\('roles\/)/g,
+                        replacement: 'require(\'roles_'
+                    }, {
+                        pattern: /(require\('memory\/)/g,
+                        replacement: 'require(\'memory_'
+                    }]
+                }
             }
         },
 
@@ -169,7 +172,8 @@ module.exports = function (grunt) {
     });
 
     // Combine the above into a default task
-    grunt.registerTask('build',         ['clean', 'copy:screeps', 'comments:dist', 'file_append']);
+    grunt.registerTask('build',         ['clean', 'copy:screeps', 'file_append', 'string-replace']);
+    grunt.registerTask('optimize',      ['comments:dist', 'removelogging']);
     grunt.registerTask('deploy-live',   ['screeps']);
     grunt.registerTask('private',       ['rsync:private']);
     grunt.registerTask('private-windows', ['shell:ps']);
@@ -180,6 +184,6 @@ module.exports = function (grunt) {
         grunt.task.run('build', 'deploy-live');
     });
     grunt.registerTask('deploy-local', 'deploys current version on server', function(){
-        grunt.task.run('build', 'private-windows');
+        grunt.task.run('build', 'optimize', 'private-windows');
     });
 };
