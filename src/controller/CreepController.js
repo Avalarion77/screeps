@@ -1,12 +1,12 @@
 'use strict';
 
 //const memory = require('memory_memoryObjects');
-const global = require('./../global');
-const roleHarvester = require('/src/extend_roles/role.harvester');
-const roleUpgrader = require('roles_role.upgrader');
-const roleBuilder = require('roles_role.builder');
-const roleRepairer = require('roles_role.repair');
-const roleTransporter = require('roles_role.transporter');
+const global = require('/src/global');
+const roleHarvester = require('/src/roles/role.harvester');
+const roleUpgrader = require('/src/roles/role.upgrader');
+const roleBuilder = require('/src/roles/role.builder');
+const roleRepairer = require('/src/roles/role.repair');
+const roleTransporter = require('/src/roles/role.transporter');
 
 const CreepController = {
 

@@ -1,34 +1,26 @@
 'use strict';
 
-const global = require('global');
-const packageType = require('packageType');
-const mainBasic = require('main.basic');
-require('creep.prototype');
+const global = require('/src/global');
+const mainBasic = require('/src/main.basic');
+require('/src/creep.prototype');
+import GameController from '/src/controller/GameController';
 
+// TODO: replace with automatic memory savings
 const HOME = global.Config.HOME_SYSTEM;
 
 module.exports.loop = function() {
-    let folderConfig = config.development;
-    if (isPackaged !== null && isPackaged) {
-        folderConfig = config.dist;
-    }
 
-    const roleHarvester = require(folderConfig.folder_roles + 'role.harvester');
-    const roleUpgrader = require(folderConfig.folder_roles + 'role.upgrader');
-    const roleBuilder = require(folderConfig.folder_roles + 'role.builder');
-    const roleRepairer = require(folderConfig.folder_roles + 'role.repair');
-    const roleTransporter = require(folderConfig.folder_roles + 'role.transporter');
-
+    // TODO: move into internal MemoryController
     mainBasic.clearMemory();
     // Danger! https://screeps.com/forum/topic/942/creeps-spawning-without-memory/9
     mainBasic.updateMemory();
-    Memory.global =  global;
+    Memory.global =  global; // TODO: change that, need an global Memory Object, but there is to much inside
 
     // TODO: no function behind this at the moment
     //Attacker.run();
-    mainBasic.checkNeedCreeps();
-    mainBasic.runCreeps();
-    mainBasic.reproduceCreeps();
+
+    GameController.run();
+
 
 
 

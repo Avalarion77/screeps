@@ -87,6 +87,18 @@ module.exports = function (grunt) {
                     }, {
                         pattern: /(require\('memory\/)/g,
                         replacement: 'require(\'memory_'
+                    },{
+                        pattern: /(?!import .* )(from '\/src\/)/g,
+                        replacement: 'from \''
+                    }, {
+                        pattern: /(?!import .* )(from 'controller\/)/g,
+                        replacement: 'from \'controller_'
+                    }, {
+                        pattern: /(?!import .* )(from 'roles\/)/g,
+                        replacement: 'from \'roles_'
+                    }, {
+                        pattern: /(?!import .* )(from 'memory\/)/g,
+                        replacement: 'from \'memory_'
                     }]
                 }
             }

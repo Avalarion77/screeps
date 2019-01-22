@@ -1,26 +1,38 @@
 'use strict';
 
-const roleHarvester = require('/src/roles/role.harvester');
-const roleUpgrader = require('roles_role.upgrader');
-const roleBuilder = require('roles_role.builder');
-const roleRepairer = require('roles_role.repair');
-const roleTransporter = require('roles_role.transporter');
-const global = require('global');
-const RoomController = require('/src/controller/RoomController')
-const GameController = {
+import RoomController from '/src/controller/RoomController';
+const mainBasic = require('/src/main.basic');
 
+class GameController {
 
-    run: function() {
+    constructor() {
+        this.controlledRooms = []; // TODO: get all rooms controlled (owned rooms + rooms scouted)
+        this.ownedRooms = []; // TODO: get all rooms owned (with spawn or harvested)
+    }
+
+    run() {
 
         // Controls the game
 
+
         // Calls all Room Controller for enemy status
+        for (let room of this.controlledRooms) {
+            // TODO: call each room
+        }
 
         // defensive masseurs overrides room controller base behavior
 
+
         // runs all Room Controller
+        for (let room of this.ownedRooms) {
+            // TODO: call each room
+        }
         RoomController.run();
 
+        // TODO: Move into RoomController or where it belongs as soon as rooms get called
+        mainBasic.checkNeedCreeps();
+        mainBasic.runCreeps();
+        mainBasic.reproduceCreeps();
     }
 
 };
