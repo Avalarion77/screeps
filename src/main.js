@@ -1,12 +1,23 @@
-const mainBasic = require('main.basic');
-const Attacker = require('roles_role.attacker');
+'use strict';
+
 const global = require('global');
+const packageType = require('packageType');
+const mainBasic = require('main.basic');
 require('creep.prototype');
 
 const HOME = global.Config.HOME_SYSTEM;
 
 module.exports.loop = function() {
+    let folderConfig = config.development;
+    if (isPackaged !== null && isPackaged) {
+        folderConfig = config.dist;
+    }
 
+    const roleHarvester = require(folderConfig.folder_roles + 'role.harvester');
+    const roleUpgrader = require(folderConfig.folder_roles + 'role.upgrader');
+    const roleBuilder = require(folderConfig.folder_roles + 'role.builder');
+    const roleRepairer = require(folderConfig.folder_roles + 'role.repair');
+    const roleTransporter = require(folderConfig.folder_roles + 'role.transporter');
 
     mainBasic.clearMemory();
     // Danger! https://screeps.com/forum/topic/942/creeps-spawning-without-memory/9

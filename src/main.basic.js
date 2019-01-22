@@ -1,8 +1,5 @@
-const roleHarvester = require('roles_role.harvester');
-const roleUpgrader = require('roles_role.upgrader');
-const roleBuilder = require('roles_role.builder');
-const roleRepairer = require('roles_role.repair');
-const roleTransporter = require('roles_role.transporter');
+'use strict';
+
 const global = require('global');
 //const memory = require('memory_memoryObjects');
 
@@ -21,12 +18,12 @@ const mainBasic = {
             // find all Sources in room (currently working because there is only 1 spawn / room
             let sources = Game.spawns[spawn].room.find(FIND_SOURCES);
             for (let source in sources) {
-                if (sources[source].id === '2ccc0d161cc954070ffc5df0') {
+                if (sources[source].id === 'dab90cfef02fe1d2b4278f4d') {
                     continue; // Enemy creeps will kill us
                 }
 
                 let harvestersForSource = getCountHarvestersBySource(sources[source].id)
-                if (!(getCountHarvesters() > 0 && needMinimumBuilders) && harvestersForSource < 3) {
+                if (getCountHarvesters() === 0 && !needMinimumBuilders && harvestersForSource < 2) {
                     console.log('current: ' + harvestersForSource + ', id:' + sources[source].id);
                     this.sourceNeedHarvester(_.size(harvestersForSource), sources[source]);
                 }
@@ -254,7 +251,7 @@ const mainBasic = {
                     }});
             }
 
-        } else if (getCountTransporters() < 4) {
+        } else if (getCountTransporters() < 1) {
             parts = [CARRY, CARRY, CARRY, MOVE, MOVE, MOVE];
             costs = getBodyPartCosts(parts);
             if (currentAvailableEnergy >= costs) {
