@@ -3,7 +3,7 @@
 const global = require('/src/global');
 const mainBasic = require('/src/main.basic');
 require('/src/creep.prototype');
-import GameController from '/src/controller/GameController';
+const GameController = require('/src/controller/GameController');
 
 // TODO: replace with automatic memory savings
 const HOME = global.Config.HOME_SYSTEM;
@@ -18,8 +18,8 @@ module.exports.loop = function() {
 
     // TODO: no function behind this at the moment
     //Attacker.run();
-
-    GameController.run();
+const test = new GameController();
+    test.run();
 
 
 

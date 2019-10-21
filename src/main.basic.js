@@ -1,6 +1,11 @@
 'use strict';
 
 const global = require('global');
+const roleHarvester = require('/src/roles/role.harvester');
+const roleUpgrader = require('/src/roles/role.upgrader');
+const roleBuilder = require('/src/roles/role.builder');
+const roleRepairer = require('/src/roles/role.repair');
+const roleTransporter = require('/src/roles/role.transporter');
 //const memory = require('memory_memoryObjects');
 
 const mainBasic = {

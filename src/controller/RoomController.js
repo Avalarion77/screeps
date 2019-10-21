@@ -2,7 +2,7 @@
 
 //const memory = require('memory_memoryObjects');
 const global = require('/src/global');
-import { CreepController } from '/src/controller/CreepController';
+const CreepController = require('/src/controller/CreepController');
 
 class RoomController {
 
